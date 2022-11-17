@@ -30,7 +30,7 @@ public:
         initialize(cells);
     }
 
-    int getCell(int i, int j) {
+    int getCell(int i, int j) const {
         return grid[i][j];
     }
 
@@ -87,13 +87,12 @@ class Solver {
     queue<Node> q;
     set<Node> reached;
     unordered_map <int, Node> expandedNodes;
+    const int DX[4] = {-1, +1, 0, 0};
+    const int DY[4] = {0, 0, +1, -1};
+    const string DIR = "UDRL";
 
 public:
     void expand(Node parent, int parentId) {
-        const int DX[] = {-1, +1, 0, 0};
-        const int DY[] = {0, 0, +1, -1};
-        const string DIR = "UDRL";
-
         pair<int, int> emptyCell = parent.state.getEmptyCell();
 
         for (int dir = 0; dir < 4; dir++) {
@@ -130,13 +129,11 @@ public:
             Node current = q.front();
             q.pop();
 
-            // check goal
             if (current == goal) {
                 printSolution(current);
                 return;
             }
             
-            // expand
             int currentId = expandedNodes.size() + 1;
             expand(current, currentId);
             expandedNodes.emplace(currentId, current);
@@ -181,4 +178,6 @@ int main() {
     Solver solver;
     Node goal(Board({1, 1, 2, 3, 3, 4, 5, 6, -1}));
     solver.solve(Node(Board()), goal);
+
+    return 0;
 }
